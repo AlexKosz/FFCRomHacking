@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fossil Fighters Elite Champions — Patcher</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1 id="hack-name">Fossil Fighters Elite Champions</h1>
+      <p class="byline">a ROM hack by <strong id="hack-author">RuntimeAlex</strong>
+        · version <span id="hack-version">…</span></p>
+    </header>
+
+    <section class="card" id="how">
+      <p>Patch your own <strong id="base-label">Fossil Fighters: Champions (USA)</strong> cartridge
+         dump right here in the browser. Your ROM is <em>never uploaded</em> —
+         validation and patching happen entirely on your machine.</p>
+    </section>
+
+    <section class="card">
+      <ol class="steps">
+        <li id="step-pick" class="active">
+          <h2>1 · Select your clean ROM</h2>
+          <div id="dropzone" tabindex="0">
+            <p><strong>Drop your .nds file here</strong> or click to browse</p>
+            <p class="hint" id="base-hint"></p>
+            <input type="file" id="file-input" accept=".nds" hidden>
+          </div>
+        </li>
+        <li id="step-validate">
+          <h2>2 · Validate</h2>
+          <div id="validate-report" class="report"></div>
+          <div class="bar"><div id="validate-bar"></div></div>
+        </li>
+        <li id="step-patch">
+          <h2>3 · Patch &amp; download</h2>
+          <div id="patch-report" class="report"></div>
+          <div class="bar"><div id="patch-bar"></div></div>
+          <a id="download" class="download hidden" download>Download patched ROM</a>
+        </li>
+      </ol>
+    </section>
+
+    <footer>
+      <p>You must own the game and dump the ROM from your own cartridge.
+         This page distributes only a patch (no Nintendo data).</p>
+    </footer>
+  </main>
+  <script src="patcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+{
+ "_comment": [
+  "Curated, per-vivosaur and per-move corrections layered on top of the automatic passes.",
+  "The systematic passes know a vivosaur's tier and can price its stats, kit, crit and support.",
+  "They cannot read a community writeup. Where a writeup names a cause or a specific number the",
+  "model cannot derive, the correction is recorded here by hand with the reason attached.",
+  "",
+  "\"overrides\" (per vivosaur) takes one of:",
+  "  \"hold\": true          -- leave this vivosaur byte-identical to retail",
+  "  \"stats\": {...}        -- force explicit rank-20 targets, overriding the model",
+  "                           (a value equal to the retail stat pins it, cancelling that change)",
+  "\"moves\" (per skill, keyed by move id) may set \"fp\", \"damage\" and/or \"chance\".",
+  "",
+  "Every entry MUST carry a \"reason\". If you cannot write the reason, the change is not intentional."
+ ],
+ "source": "Community tier list placement explanations, 2026-07-06",
+ "overrides": {
+  "Centro": {
+   "stats": {
+    "accuracy": 14
+   },
+   "reason": "Same accuracy-6 problem as Zino. The writeup calls 22 accuracy 'workable' -- that is what Centro reaches only when Parting Blow 2 triggers. Setting the base to 14 means the trigger still matters (it is what gets Centro to workable) but the vivosaur is no longer helpless before it fires."
+  },
+  "Hopter": {
+   "hold": true,
+   "reason": "'Without Berserk, Hopter would be a high A tier, minimum, and would likely be a very solid S tier.' Hopter is E tier because of its ABILITY -- Berserk turns it off once it takes 280 damage -- and abilities are the one pillar this pass still does not edit. Making its skills cheaper or its stats bigger does not change the fact that every vivosaur in the game has a built-in switch for it, so I left it retail rather than hand it a buff that cannot reach the problem."
+  },
+  "Radox": {
+   "stats": {
+    "attack": 43
+   },
+   "reason": "The LP cut is on target -- Radox wins by outlasting things -- but the attack cut is not. The writeup calls it 'how pitiful of an attacker Radox is' already; taking 4 more points off a stat nobody uses is exactly the noise this pass exists to remove. Attack pinned to retail, bulk nerf kept."
+  },
+  "Zino": {
+   "stats": {
+    "accuracy": 20
+   },
+   "reason": "Accuracy 6 is the single named reason Zino is 'probably the single worst Vivosaur in the game' -- it 'makes it next to impossible to hit anything faster than Zongazonga'. A proportional buff can only reach 10, which does not change that. 20 makes it able to connect while leaving it well under the 60 roster ceiling and still the worst accuracy in the game after Centro."
+  }
+ },
+ "moves": {
+  "642": {
+   "name": "Zanth Press",
+   "damage": 45,
+   "fp": 150,
+   "reason": "The writeup calls this an outright coding error: '150 cost press does about 25 more base damage than it should, something you'd expect from a 230 cost skill.' The systematic pass only trimmed it 70 to 67, because it prices the skill against Zanth's other skills rather than against what a 150 FP skill should do. Cutting the damage by the 25 points the writeup names fixes the actual bug and leaves the FP cost, and so Zanth's play pattern, intact -- the fp value here is retail, which pins it against the pass's own 150-to-170 raise."
+  },
+  "51": {
+   "name": "Cold Shout",
+   "fp": 90,
+   "reason": "Cryo is S tier for exactly one reason -- 'Cold Shout. Click Cold Shout. 100% Gold Excite and strong damage for only 50 FP makes it probably the overall best single skill in the game.' My own kit metric independently ranks it the highest-value move in the game. A move that is the entire reason a vivosaur is S tier needs its cost to actually hurt; 50 to 90 keeps it castable but stops it being free. The writeup also notes 'having so much of its power budget in Cold Shout prevents it from being banworthy', so pricing the skill is the correct lever rather than touching Cryo's stats."
+  },
+  "78": {
+   "name": "Disorienting Kick",
+   "chance": 80,
+   "reason": "Sopteryx's '100% gold confuse skill, that it can use every turn thanks to FP plus 3' is the core of the most complained-about vivosaur in S+. A guaranteed turn-denial every turn has no counterplay; dropping it to 80% restores the 'unreliable since they have a chance to fail' property the writeups rely on for every other status vivosaur, without removing the threat."
+  },
+  "476": {
+   "name": "Berta Combo",
+   "fp": 130,
+   "reason": "Berta is S tier purely on status economy -- '100 FP 60% Sleep and 140 FP 70% Confusion' let it 'fulfil the entire status budget on your team and still use both of them'. The writeup says explicitly that 'its stats are pretty balanced, but nothing is too high', so the stat block is the wrong lever; the cost of the two status skills is the right one. Raising Sleep from 100 to 130 FP means Berta can no longer reliably fire both in the same window."
+  }
+ }
+}

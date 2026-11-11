@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FFC Hack Studio</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-icon">🦴</span>
+      <div>
+        <h1>FFC Hack Studio</h1>
+        <p>Fossil Fighters: Champions</p>
+      </div>
+    </div>
+
+    <label class="side-label" for="project-select">Active project</label>
+    <select id="project-select">
+      <option value="">— no project —</option>
+      {% for p in projects %}
+      <option value="{{ p }}">{{ p }}</option>
+      {% endfor %}
+    </select>
+
+    <nav class="side-nav">
+      <button data-tab="home" class="active"><span>🏠</span> Home</button>
+      <div class="nav-group" id="editor-nav">
+        <p class="nav-heading">Edit your hack</p>
+        <button data-tab="creatures" disabled><span>🦖</span> Vivosaurs</button>
+        <button data-tab="moves" disabled><span>💥</span> Moves</button>
+        <button data-tab="fossils" disabled><span>⛏️</span> Dig Sites</button>
+        <button data-tab="battles" disabled><span>⚔️</span> Battles</button>
+        <button data-tab="texts" disabled><span>💬</span> Text</button>
+        <button data-tab="mods" disabled><span>🎲</span> Randomizer &amp; Hard Mode</button>
+      </div>
+      <div class="nav-group">
+        <p class="nav-heading">Finish</p>
+        <button data-tab="build" disabled><span>📦</span> Build &amp; Share</button>
+      </div>
+    </nav>
+
+    <div class="side-footer">
+      <div class="autosave-pill" title="Every edit is written to your project folder the moment you save it. Close the app any time — nothing is lost.">
+        <span class="dot"></span> Progress saves automatically
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <!-- ============================================================ HOME -->
+    <section class="tab-content active" id="tab-home">
+      <div class="hero">
+        <h2>Make your own Fossil Fighters: Champions hack</h2>
+        <p>No ROM-hacking experience needed. This tool walks you from your own game
+           dump to a shareable patch file, and every change you make is saved to
+           disk immediately — pick the project back up next week or next year.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step-card">
+          <span class="step-num">1</span>
+          <h3>Create a project</h3>
+          <p>Point the tool at your ROM. It unpacks the game into an editable
+             workspace — done once per project.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">2</span>
+          <h3>Edit anything</h3>
+          <p>Rebalance vivosaurs, move fossils between dig sites, redesign every
+             battle, or flip on the randomizer.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">3</span>
+          <h3>Build &amp; test</h3>
+          <p>One click rebuilds a playable <code>.nds</code> you can try in an
+             emulator right away.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">4</span>
+          <h3>Share a patch</h3>
+          <p>Export a small <code>.bps</code> patch file — the legal way to share
+             a hack, since it contains only your changes.</p>
+        </div>
+      </div>
+
+      <div class="panel" id="new-project-panel">
+        <h3>Start a new project</h3>
+        <p class="help">You need a ROM of <em>Fossil Fighters: Champions (USA)</em> that you
+           dumped from your own cartridge (a <code>.nds</code> file). Extracting takes a
+           few minutes the first time.</p>
+        <div class="row">
+          <label>Project name
+            <input id="project-name" placeholder="my-first-hack">
+            <small>Letters, numbers and dashes work best — it becomes a folder name.</small>
+          </label>
+          <label>Path to your ROM (.nds file)
+            <input id="rom-path" size="55" placeholder="C:\Users\you\Desktop\Fossil Fighters Champions.nds">
+            <small>Tip: shift-right-click the file in Explorer → “Copy as path”.</small>
+          </label>
+        </div>
+        <button id="create-project" class="primary">Create project</button>
+      </div>
+
+      <div class="panel hidden" id="project-overview">
+        <h3 id="overview-title"></h3>
+        <div class="overview-grid">
+          <div>
+            <p class="kv"><span>Created</span><b id="overview-created"></b></p>
+            <p class="kv"><span>Original ROM</span><b id="overview-rom" class="mono"></b></p>
+            <p class="kv"><span>Workspace</span><b id="overview-workspace" class="mono"></b></p>
+          </div>
+          <div>
+            <label class="notes-label">Project notes
+              <textarea id="project-notes" rows="7"
+                placeholder="Ideas, to-dos, what you changed last session… Notes save automatically as you type, so future-you knows where you left off."></textarea>
+            </label>
+            <small id="notes-status" class="muted"></small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================= CREATURES -->
+    <section class="tab-content" id="tab-creatures">
+      <header class="tab-header">
+        <h2>🦖 Vivosaurs</h2>
+        <p>Rebalance any vivosaur’s stats, element and moves.</p>
+      </header>
+      <details class="explain">
+        <summary>How does this work?</summary>
+        <p>Every vivosaur in the game is defined in one data file. Pick one from the
+           list, change its numbers, and hit <b>Save</b>. “Rank 20” values are the
+           stats at maximum rank — the game scales lower ranks from them. Skills are
+           the move IDs the vivosaur knows; keep the list the same length if you’re
+           unsure.</p>
+      </details>
+      <div class="split">
+        <div id="creature-list" class="list"></div>
+        <div id="creature-editor" class="editor hidden">
+          <h3 id="creature-title"></h3>
+          <div class="grid">
+            <label>Element<select id="c-element">{% for e in elements %}<option>{{ e }}</option>{% endfor %}</select></label>
+            <label>Range<select id="c-range">{% for r in ranges %}<option>{{ r }}</option>{% endfor %}</select></label>
+            <label>Dig site (Fossilary sort)<select id="c-digsite">{% for k,v in digsites.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></label>
+          </div>
+          <h4>Rank 20 stats</h4>
+          <div class="grid">
+            <label>Attack <input type="number" id="c-atk20"></label>
+            <label>Defense <input type="number" id="c-def20"></label>
+            <label>Accuracy <input type="number" id="c-acc20"></label>
+            <label>Speed <input type="number" id="c-spd20"></label>
+          </div>
+          <h4>Rank 20 HP</h4>
+          <label>Max HP <input type="number" id="c-hp20"></label>
+          <h4>Support effects <small class="muted">(%, −100 to 100 — applied while this vivosaur sits in the Support Zone)</small></h4>
+          <label class="sup-toggle"><input type="checkbox" id="c-sup-ally-on"> Affects <b>allies</b> in the Attack Zone</label>
+          <div class="grid" id="c-sup-ally-fields">
+            <label>Attack <input type="number" id="c-sup-ally-attack" min="-100" max="100"></label>
+            <label>Defense <input type="number" id="c-sup-ally-defense" min="-100" max="100"></label>
+            <label>Accuracy <input type="number" id="c-sup-ally-accuracy" min="-100" max="100"></label>
+            <label>Speed <input type="number" id="c-sup-ally-speed" min="-100" max="100"></label>
+          </div>
+          <label class="sup-toggle"><input type="checkbox" id="c-sup-enemy-on"> Affects the <b>enemy</b> team <small class="muted">(negative = debuff)</small></label>
+          <div class="grid" id="c-sup-enemy-fields">
+            <label>Attack <input type="number" id="c-sup-enemy-attack" min="-100" max="100"></label>
+            <label>Defense <input type="number" id="c-sup-enemy-defense" min="-100" max="100"></label>
+            <label>Accuracy <input type="number" id="c-sup-enemy-accuracy" min="-100" max="100"></label>
+            <label>Speed <input type="number" id="c-sup-enemy-speed" min="-100" max="100"></label>
+          </div>
+          <h4>Skills <small class="muted">(move IDs, comma-separated)</small></h4>
+          <input id="c-skills" size="50">
+          <div class="actions"><button id="save-creature" class="primary">Save vivosaur</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================== MOVES -->
+    <section class="tab-content" id="tab-moves">
+      <header class="tab-header">
+        <h2>💥 Moves</h2>
+        <p>Rebalance any move’s FP cost and damage.</p>
+      </header>
+      <details class="explain">
+        <summary>How does this work?</summary>
+        <p>Every move in the game lives in one data file (<code>etc/attack_defs</code>).
+           A move is one or more <b>hits</b>; each hit has an <b>FP cost</b> and a
+           <b>damage</b> value (damage is base power — the game scales it by the
+           attacker’s Attack stat and rank; status-only moves have damage 0).
+           The <b>total</b> row is what the game displays and charges — it’s kept
+           in sync automatically. If a move inflicts a status effect, you can
+           change its <b>chance</b>.</p>
+        <p><b>Element:</b> in Fossil Fighters a move has no element of its own —
+           it always uses the element of the vivosaur that knows it. To change
+           that, edit the vivosaur’s element in the <b>Vivosaurs</b> tab.</p>
+      </details>
+      <div class="row">
+        <label>Filter moves <input id="move-filter" placeholder="move name or vivosaur"></label>
+        <button id="load-moves">Reload</button>
+      </div>
+      <div class="split">
+        <div id="move-list" class="list"></div>
+        <div id="move-editor" class="editor">
+          <p class="muted">Select a move on the left to edit it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= FOSSILS -->
+    <section class="tab-content" id="tab-fossils">
+      <header class="tab-header">
+        <h2>⛏️ Dig Sites</h2>
+        <p>Control exactly which fossils each dig site hands out.</p>
+      </header>
+      <details class="explain">
+        <summary>How does this work?</summary>
+        <p>Each dig site rolls the fossil you find from a table of “rock records”.
+           Every record below is one entry in that table: pick which vivosaur and
+           which body part (head, body, arms, legs) it should give. Records are
+           equally-weighted rolls, so the <b>share</b> column is that record’s chance
+           of being your find. Jewel rocks, droppings and dark fossils are shown
+           locked — they’re special items, not vivosaur fossils.</p>
+      </details>
+      <div class="row">
+        <label>Filter sites <input id="fossil-filter" placeholder="map id or vivosaur name"></label>
+        <button id="load-fossils">Reload</button>
+      </div>
+      <div class="split">
+        <div id="fossil-site-list" class="list"></div>
+        <div id="fossil-records" class="editor">
+          <p class="muted">Select a dig site on the left to see its rock records.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= BATTLES -->
+    <section class="tab-content" id="tab-battles">
+      <header class="tab-header">
+        <h2>⚔️ Battles</h2>
+        <p>Redesign every fight in the game, slot by slot.</p>
+      </header>
+      <details class="explain">
+        <summary>How does this work?</summary>
+        <p>Each battle file lists the teams. For every fighter slot you can set the
+           vivosaur, its <b>rank</b> (1–20), a <b>stat multiplier</b>
+           (×1.0 = unchanged, higher = stronger), and a <b>tactic class</b> (1–4,
+           how aggressively that vivosaur is played). The four <b>AI tactic ids</b>
+           (1–17) control the enemy’s overall strategy — 11 and up is the smarter
+           late-game set. Player-side entries are shown for context.</p>
+      </details>
+      <div class="row">
+        <label>Filter battles <input id="battle-filter" placeholder="battle id, trainer, or vivosaur"></label>
+        <button id="load-battles">Reload</button>
+      </div>
+      <div class="split">
+        <div id="battle-list" class="list"></div>
+        <div id="battle-editor" class="editor">
+          <p class="muted">Select a battle on the left to edit its teams.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ TEXT -->
+    <section class="tab-content" id="tab-texts">
+      <header class="tab-header">
+        <h2>💬 Text</h2>
+        <p>Rewrite any line of text in the game — dialogue, names, menus, subtitles.</p>
+      </header>
+      <details class="explain">
+        <summary>How does this work?</summary>
+        <p>The game’s text lives in two kinds of archives: <b>msg/…</b> files hold
+           story dialogue and cutscene subtitles, <b>text/…</b> files hold names and
+           UI strings (vivosaur names, move names, menus). Pick an archive (or
+           search across all of them), edit any string, and save. Formatting codes
+           you’ll see: <code>\n</code>-style line breaks are real newlines,
+           <code>$p</code> is the player’s name, <code>$c1…$c0</code> colors text,
+           <code>$f</code> starts a new page. Keep lines roughly the original
+           length — the game doesn’t re-wrap text.</p>
+      </details>
+      <div class="row">
+        <label>Search all text <input id="text-search" placeholder="find any string (min 2 chars)…" size="40"></label>
+        <label>Filter archives <input id="text-file-filter" placeholder="msg_0012, attack_name…"></label>
+        <button id="load-texts">Reload</button>
+      </div>
+      <div id="text-search-results" class="hidden"></div>
+      <div class="split">
+        <div id="text-file-list" class="list"></div>
+        <div id="text-editor" class="editor">
+          <p class="muted">Select a text archive on the left, or search above.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ MODS -->
+    <section class="tab-content" id="tab-mods">
+      <header class="tab-header">
+        <h2>🎲 Randomizer &amp; Hard Mode</h2>
+        <p>Optional game-wide mods applied automatically when you build.</p>
+      </header>
+
+      <div class="panel">
+        <h3>Randomizer</h3>
+        <p class="help">Shuffles the game when you build. The <b>seed</b> makes it
+           repeatable — the same seed always produces the same shuffle, so you can
+           share a seed with friends.</p>
+        <label class="check"><input type="checkbox" id="rand-enabled"> Enable randomizer on build</label>
+        <div class="row">
+          <label>Seed <input type="number" id="rand-seed" value="12345"></label>
+        </div>
+        <label class="check"><input type="checkbox" id="rand-fossils" checked> Randomize which dig sites give which fossils</label>
+        <label class="check"><input type="checkbox" id="rand-battles" checked> Randomize enemy teams (keeps elements matched)</label>
+        <label class="check"><input type="checkbox" id="rand-mono"> Mono-site mode — all four parts of a vivosaur at one site</label>
+        <div class="actions"><button id="save-randomizer" class="primary">Save randomizer settings</button></div>
+      </div>
+
+      <div class="panel">
+        <h3>Hard Mode</h3>
+        <p class="help">Raises enemy ranks (+2, capped at 20), upgrades enemy AI to
+           the late-game tactic set, and bumps tactic classes in every non-tutorial
+           battle.</p>
+        <label class="check"><input type="checkbox" id="hard-mode"> Enable hard mode on build</label>
+        <div class="actions"><button id="save-hardmode" class="primary">Save hard mode setting</button></div>
+      </div>
+
+      <div class="panel">
+        <h3>Bug fix: elemental resistance</h3>
+        <p class="help">In the retail game an elemental <em>disadvantage</em> does
+           nothing — Fire hits Water for full damage (FF1 applied ×0.75). The game
+           actually ships a dedicated disadvantage multiplier slot in its battle
+           constants… set to ×1.0. This fix writes FF1’s ×0.75 into it, so every
+           matchup counts on every attack:
+           <b>advantage ×1.5 · neutral ×1.0 · disadvantage ×0.75</b>.</p>
+        <p class="help">One constant, applied at build time only — abilities,
+           Elemental Boost, and everything else stay untouched, and turning the
+           toggle off restores retail behavior on the next build.</p>
+        <label class="check"><input type="checkbox" id="element-fix"> Fix elemental resistance on build</label>
+        <div class="actions"><button id="save-elementfix" class="primary">Save bug fix setting</button></div>
+      </div>
+    </section>
+
+    <!-- =========================================================== BUILD -->
+    <section class="tab-content" id="tab-build">
+      <header class="tab-header">
+        <h2>📦 Build &amp; Share</h2>
+        <p>Turn your edits into a playable ROM and a shareable patch.</p>
+      </header>
+
+      <details class="explain" open>
+        <summary>ROM vs. patch — which do I share?</summary>
+        <p><b>Build ROM</b> produces a playable <code>.nds</code> file for testing in
+           an emulator (melonDS, DeSmuME) or on a flashcart. <b>Never upload the ROM</b> —
+           it contains Nintendo’s copyrighted game.</p>
+        <p><b>Create patch</b> produces a small <code>.bps</code> file containing only
+           <em>your changes</em>. That’s the standard, legal way to share a hack:
+           players apply it to their own game dump with any BPS patcher (e.g.
+           <a href="https://www.marcrobledo.com/RomPatcher.js/" target="_blank" rel="noopener">Rom Patcher JS</a>).
+           Every patch is verified byte-for-byte before it’s saved.</p>
+      </details>
+
+      <div class="panel">
+        <h3>Hack identity</h3>
+        <p class="help">Shown in the patch metadata and used for the patch filename.</p>
+        <div class="row">
+          <label>Hack title <input id="hack-title" placeholder="Fossil Fighters: My Cool Hack"></label>
+          <label>Author <input id="hack-author" placeholder="your handle"></label>
+          <button id="save-identity">Save</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>1 · Build a test ROM</h3>
+        <p class="help">Repacks your workspace into a playable <code>.nds</code>.
+           Randomizer / hard mode settings are applied here. This can take a few
+           minutes.</p>
+        <button id="build-rom" class="primary">Build ROM</button>
+        <div id="build-result" class="result hidden"></div>
+      </div>
+
+      <div class="panel">
+        <h3>2 · Create the shareable patch</h3>
+        <p class="help">Builds the ROM (same as above), then diffs it against your
+           original, unmodified ROM to make the <code>.bps</code>. The original ROM
+           below must be the untouched dump you started from.</p>
+        <div class="row">
+          <label>Original ROM (.nds)
+            <input id="base-rom" size="55" placeholder="C:\path\to\original.nds">
+          </label>
+        </div>
+        <button id="make-patch" class="primary">Build ROM + Create Patch</button>
+        <div id="patch-result" class="result hidden"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<datalist id="vivo-datalist"></datalist>
+<div id="toast-root"></div>
+<div id="overlay" class="hidden">
+  <div class="overlay-box">
+    <div class="spinner"></div>
+    <p id="overlay-msg">Working…</p>
+    <small class="muted">Big jobs (extracting or building a ROM) can take several minutes.<br>Leave this window open.</small>
+  </div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

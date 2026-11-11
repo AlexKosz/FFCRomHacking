@@ -1,0 +1,26 @@
+{
+  "name": "Fossil Fighters Elite Champions",
+  "author": "RuntimeAlex",
+  "version": "2026.09.22",
+  "built": "2026-09-22T20:39:27",
+  "patchFile": "fossil-fighters-elite-champions.bps",
+  "patchSize": 570976,
+  "patchCrc32": "2144df1c",
+  "base": {
+    "gamecode": "VDEE",
+    "internalTitle": "KASEKI2\u0000\u0000\u0000\u0000\u0000",
+    "size": 268435456,
+    "crc32": "4b3bcd26",
+    "md5": "8a590205ef185e7f23f7def1decde49d",
+    "label": "Fossil Fighters: Champions (USA) (NDSi Enhanced)",
+    "twlStart": 257961984,
+    "ntrCrc32": "60e0208e"
+  },
+  "target": {
+    "size": 268435456,
+    "crc32": "9ba2cbaf",
+    "outputName": "Fossil Fighters Elite Champions.nds",
+    "salvageCrc32": "878b766b",
+    "salvageOutputName": "Fossil Fighters Elite Champions (DS mode only).nds"
+  }
+}

@@ -1,0 +1,104 @@
+:root {
+  --bg: #17130e;
+  --panel: #241d14;
+  --panel2: #2e251a;
+  --amber: #e8a33d;
+  --amber2: #f6c66d;
+  --bone: #efe6d4;
+  --dim: #a3947c;
+  --good: #7fce7f;
+  --bad: #e07a6a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 500px at 70% -10%, #3a2c17 0%, transparent 60%),
+    var(--bg);
+  color: var(--bone);
+  font: 16px/1.55 system-ui, "Segoe UI", sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+main { width: min(720px, 94vw); padding: 40px 0 60px; }
+
+header { text-align: center; margin-bottom: 22px; }
+h1 {
+  margin: 0;
+  font-size: clamp(26px, 5vw, 38px);
+  letter-spacing: 0.5px;
+  color: var(--amber2);
+  text-shadow: 0 2px 0 #00000066;
+}
+.byline { color: var(--dim); margin: 6px 0 0; }
+
+.card {
+  background: var(--panel);
+  border: 1px solid #40342270;
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 24px #00000055;
+}
+
+.steps { list-style: none; margin: 0; padding: 0; }
+.steps li {
+  opacity: 0.55;
+  transition: opacity 0.25s;
+  padding: 10px 0;
+  border-bottom: 1px dashed #40342270;
+}
+.steps li:last-child { border-bottom: none; }
+.steps li.active { opacity: 1; }
+.steps h2 { font-size: 17px; margin: 0 0 10px; color: var(--amber); }
+
+#dropzone {
+  border: 2px dashed #6b5636;
+  border-radius: 12px;
+  background: var(--panel2);
+  padding: 26px 18px;
+  text-align: center;
+  cursor: pointer;
+}
+#dropzone.drag, #dropzone:hover { border-color: var(--amber); background: #362b1c; }
+#dropzone p { margin: 4px 0; }
+.hint { color: var(--dim); font-size: 13px; }
+
+.report { min-height: 1.4em; font-size: 15px; }
+.report.good { color: var(--good); }
+.report.bad { color: var(--bad); }
+.report code { background: #00000045; padding: 1px 6px; border-radius: 6px; }
+
+.bar {
+  height: 8px;
+  border-radius: 6px;
+  background: #00000050;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.bar > div {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--amber), var(--amber2));
+  transition: width 0.15s;
+}
+
+.download {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 12px 22px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--amber2), var(--amber));
+  color: #241a08;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 14px #00000066;
+}
+.download:hover { filter: brightness(1.07); }
+.hidden { display: none; }
+
+footer { text-align: center; color: var(--dim); font-size: 13px; margin-top: 8px; }

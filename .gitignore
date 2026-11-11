@@ -1,0 +1,33 @@
+# ROM files
+*.nds
+*.zip
+
+# Saves / emulator dumps
+*.sav
+*.ml1
+
+# Extracted / project data
+projects/
+Fossil Fighters Champions*/
+
+# Temp / logs
+rom_*.txt
+test_map_*
+carbonizer.zip
+carbonizer-win.zip
+~$*
+.claude/
+
+# Third-party clones (separate git repos)
+tools/carbonizer-src/
+tools/ff1-binary-formats/
+tools/Fossil-Fighters-Tool/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db

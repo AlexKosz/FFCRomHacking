@@ -1,0 +1,29 @@
+{
+  "_comment": "Curated trainer + location for notable FFC battles. Battle files carry no trainer/location field (both are assigned at runtime by event scripts), so this is a hand-authored, editable overlay grounded in each battle's pre-battle dialogue and enemy team. Battles not listed here get a generic 'Fossil Fighter' name and no location. Add entries as { \"<battleId>\": { \"trainer\": \"Name\", \"location\": \"Place or null\" } }. Set location to null when unknown.",
+  "battles": {
+    "100": { "trainer": "Joanie", "location": "Caliosteo Cup" },
+    "101": { "trainer": "Joanie", "location": "Caliosteo Cup" },
+    "102": { "trainer": "Joanie", "location": "Caliosteo Cup" },
+    "200": { "trainer": "Joanie", "location": "Caliosteo Cup" },
+    "300": { "trainer": "Joanie", "location": "Caliosteo Cup" },
+    "301": { "trainer": "Joanie", "location": "Caliosteo Cup" },
+    "302": { "trainer": "Madame Pooch", "location": "Caliosteo Cup" },
+    "400": { "trainer": "Joanie", "location": "Caliosteo Cup" },
+    "402": { "trainer": "Madame Pooch", "location": "Caliosteo Cup" },
+    "500": { "trainer": "Joanie", "location": "Caliosteo Cup" },
+    "1907": { "trainer": "Joanie", "location": "Caliosteo Cup" },
+    "601": { "trainer": "Lord Tonzilla", "location": null },
+    "700": { "trainer": "BB Brigade Goon", "location": "Rainbow Canyon" },
+    "701": { "trainer": "BB Brigade Goon", "location": "Rainbow Canyon" },
+    "704": { "trainer": "BB Brigade Goon", "location": "Rainbow Canyon" },
+    "705": { "trainer": "BB Brigade Goon", "location": "Rainbow Canyon" },
+    "800": { "trainer": "Frankie Bones", "location": "Rainbow Canyon" },
+    "900": { "trainer": "BB Brigade Goon", "location": null },
+    "903": { "trainer": "Zongazonga", "location": null },
+    "1600": { "trainer": "BB Brigade Goon", "location": "BareBones Brigade Base" },
+    "1601": { "trainer": "Frankie Bones", "location": "BareBones Brigade Base" },
+    "1602": { "trainer": "Paulie Bones", "location": "BareBones Brigade Base" },
+    "1603": { "trainer": "BB Brigade Goon", "location": "BareBones Brigade Base" },
+    "1908": { "trainer": "Zongazonga", "location": null }
+  }
+}

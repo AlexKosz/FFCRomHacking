@@ -1,0 +1,20 @@
+﻿{
+  "compression": true,
+  "externalMetadata": true,
+  "game": "ffc",
+  "skipUnpacking": [
+    "model/**",
+    "motion/**",
+    "image/**",
+    "msg/**"
+  ],
+  "processors": {
+    "exportModels": false,
+    "exportVivosaurModels": false,
+    "exportSprites": false,
+    "exportImages": false,
+    "ffcCreatureLabeller": true,
+    "mapLabeller": true,
+    "episodeBattleLabeller": true
+  }
+}
